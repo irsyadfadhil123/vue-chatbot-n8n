@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from "vue"
+import VueMarkdown from 'vue3-markdown-it'
 
 const messages = ref([
   { sender: "bot", text: "Halo! Ada yang bisa saya bantu?" }
@@ -10,7 +11,6 @@ const loading = ref(false)
 const sendMessage = async () => {
   if (!userInput.value.trim()) return
 
-  // Tambahkan pesan user
   messages.value.push({ sender: "user", text: userInput.value })
 
   loading.value = true
@@ -22,7 +22,6 @@ const sendMessage = async () => {
     })
     const data = await res.json()
 
-    // Tambahkan respon dari bot
     messages.value.push({ sender: "bot", text: data.output || "Maaf, ada error." })
   } catch (err) {
     messages.value.push({ sender: "bot", text: "Gagal terhubung ke server." })
@@ -37,7 +36,7 @@ const sendMessage = async () => {
   <div class="chat-container">
     <div class="messages">
       <div v-for="(msg, i) in messages" :key="i" :class="['msg', msg.sender]">
-        {{ msg.text }}
+        <VueMarkdown :source="msg.text" />
       </div>
     </div>
 
@@ -55,14 +54,15 @@ const sendMessage = async () => {
 
 <style scoped>
 .chat-container {
-  max-width: 500px;
+  font-family: system-ui;
+  max-width: 1000px;
   margin: 0 auto;
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 12px;
   display: flex;
   flex-direction: column;
-  height: 70vh;
+  height: 94vh;
 }
 
 .messages {
